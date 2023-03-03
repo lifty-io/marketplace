@@ -134,6 +134,7 @@ contract FeeProvider is Ownable {
     function changeFeesBeneficiary(
         address newFeesBeneficiary
     ) external onlyOwner {
+        require(newFeesBeneficiary != address(0));
         feesBeneficiary = newFeesBeneficiary;
     }
 
