@@ -62,7 +62,7 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
      */
     function buy(
         Order[] calldata orders,
-        uint expiredAt,
+        uint256 expiredAt,
         bytes calldata dealSign,
         bytes32[] calldata ordersHashes
     ) external payable nonReentrant {
@@ -187,22 +187,24 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
      * @dev generates a unique hash for an order
      * @param order  order struct
      */
-    function getOrderHash(
-        Order calldata order
-    ) internal pure returns (bytes32) {
+    function getOrderHash(Order calldata order)
+    internal
+    pure
+    returns (bytes32)
+    {
         if (order.askAny && order.ask.length == 1) {
             return
-                keccak256(
-                    abi.encode(
-                        order.bid,
-                        order.ask[0].assetType,
-                        order.ask[0].collection,
-                        order.ask[0].amount,
-                        order.totalAmount,
-                        order.creationDate,
-                        order.expirationDate
-                    )
-                );
+            keccak256(
+                abi.encode(
+                    order.bid,
+                    order.ask[0].assetType,
+                    order.ask[0].collection,
+                    order.ask[0].amount,
+                    order.totalAmount,
+                    order.creationDate,
+                    order.expirationDate
+                )
+            );
         }
 
         if (order.bidAny && order.bid.length == 1) {
@@ -239,7 +241,7 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
      * @param ordersHashes  list of orders hashes
      */
     function verifyDealSign(
-        uint expiredAt,
+        uint256 expiredAt,
         bytes calldata dealSign,
         bytes32[] calldata ordersHashes
     ) internal view returns (bool) {
@@ -254,10 +256,11 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
      * @param signature  65 bytes of signature
      * @param hash       hash that signed
      */
-    function recoverSigner(
-        bytes memory signature,
-        bytes32 hash
-    ) internal pure returns (address) {
+    function recoverSigner(bytes memory signature, bytes32 hash)
+    internal
+    pure
+    returns (address)
+    {
         return ECDSA.recover(ECDSA.toEthSignedMessageHash(hash), signature);
     }
 }
