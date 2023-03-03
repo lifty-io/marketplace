@@ -147,7 +147,7 @@ contract FeeProvider is Ownable {
         uint16 sellerFee
     ) external onlyOwner {
         require(
-            sellerFee < 10000 && buyerFee < 10000,
+            sellerFee + buyerFee < 10000,
             "FeeProvider: wrong fee amount"
         );
 
