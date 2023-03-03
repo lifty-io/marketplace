@@ -89,7 +89,7 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
     function cancel(Order calldata order) external {
         require(
             order.signer == _msgSender() &&
-                recoverSigner(order.rootSign, order.root) == _msgSender(),
+            recoverSigner(order.rootSign, order.root) == _msgSender(),
             "Cancel: wrong sender"
         );
         bytes32 orderHash = getOrderHash(order);
