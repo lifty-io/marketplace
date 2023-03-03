@@ -99,10 +99,16 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
     }
 
     /**
-     * @dev checks signs validity, handles ask and bid transfers to counterparties, increments nonce
+     * @dev Checks order validity, handles ask and bid transfers to counterparties, increments nonce
      * @param order  order struct
      */
     function proceedOrder(Order calldata order, bytes32 orderHash) internal {
+        // check order expiration date
+        require(
+            order.expirationDate > block.timestamp,
+            "ProceedOrder: order expired."
+        );
+
         // check order amount
         require(
             order.totalAmount >= nonce[orderHash] + order.amount,
