@@ -194,17 +194,17 @@ contract Marketplace is ReentrancyGuard, Operator, OrderFulfiller {
     {
         if (order.askAny && order.ask.length == 1) {
             return
-            keccak256(
-                abi.encode(
-                    order.bid,
-                    order.ask[0].assetType,
-                    order.ask[0].collection,
-                    order.ask[0].amount,
-                    order.totalAmount,
-                    order.creationDate,
-                    order.expirationDate
-                )
-            );
+                keccak256(
+                    abi.encode(
+                        order.bid,
+                        order.ask[0].assetType,
+                        order.ask[0].collection,
+                        order.ask[0].amount,
+                        order.totalAmount,
+                        order.creationDate,
+                        order.expirationDate
+                    )
+                );
         }
 
         if (order.bidAny && order.bid.length == 1) {

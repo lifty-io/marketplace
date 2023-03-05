@@ -14,7 +14,7 @@ This project enables users to list thousands of NFTs by one signature request, s
 <td>Ethereum</td>
 <td>
 
-[0xA4b71B99eeF99eA217aDB7E3641cB3E779EaA529](https://etherscan.io/address/0xA4b71B99eeF99eA217aDB7E3641cB3E779EaA529#code)
+[0x5231617982e340a6651bd6357f15bc3461519b2b](https://etherscan.io/address/0x5231617982e340a6651bd6357f15bc3461519b2b#code)
 
 </td>
 </tr>
