@@ -60,9 +60,11 @@ contract FeeProvider is Ownable {
      * @dev returns marketplace fee for a collection
      * @param collection  address of a collection to check
      */
-    function getMarketplaceFee(
-        address collection
-    ) external view returns (MarketplaceFee memory) {
+    function getMarketplaceFee(address collection)
+    external
+    view
+    returns (MarketplaceFee memory)
+    {
         return _getMarketplaceFee(collection);
     }
 
@@ -70,9 +72,11 @@ contract FeeProvider is Ownable {
      * @dev internal function that returns marketplace fee for a collection
      * @param collection  address of a collection to check
      */
-    function _getMarketplaceFee(
-        address collection
-    ) internal view returns (MarketplaceFee memory) {
+    function _getMarketplaceFee(address collection)
+    internal
+    view
+    returns (MarketplaceFee memory)
+    {
         if (marketplaceCollectionFee[collection].customFee) {
             return marketplaceCollectionFee[collection];
         }
@@ -84,13 +88,10 @@ contract FeeProvider is Ownable {
      * @param collection  address of a collection of a token
      * @param id          id of token
      */
-    function getRoyalties(
-        address collection,
-        uint256 id
-    )
-        external
-        view
-        returns (address payable[] memory recipients, uint16[] memory fees)
+    function getRoyalties(address collection, uint256 id)
+    external
+    view
+    returns (address payable[] memory recipients, uint16[] memory fees)
     {
         return _getRoyalties(collection, id);
     }
@@ -100,21 +101,25 @@ contract FeeProvider is Ownable {
      * @param collectionAddress  address of a collection of a token
      * @param id          id of token
      */
-    function _getRoyalties(
-        address collectionAddress,
-        uint256 id
-    )
-        internal
-        view
-        returns (address payable[] memory recipients, uint16[] memory fees)
+    function _getRoyalties(address collectionAddress, uint256 id)
+    internal
+    view
+    returns (address payable[] memory recipients, uint16[] memory fees)
     {
-        if (IERC165(collectionAddress).supportsInterface(INTERFACE_ID_FEES)) {
-            IGetRoyalties collection = IGetRoyalties(collectionAddress);
-            return (collection.getFeeRecipients(id), collection.getFeeBps(id));
-        }
+        try IERC165(collectionAddress).supportsInterface(INTERFACE_ID_FEES)
+        returns (bool supported) {
+            if (supported) {
+                IGetRoyalties collection = IGetRoyalties(collectionAddress);
+                return (
+                collection.getFeeRecipients(id),
+                collection.getFeeBps(id)
+                );
+            }
+        } catch {}
+
         return (
-            customCollectionRoyalties[collectionAddress].recipients,
-            customCollectionRoyalties[collectionAddress].fees
+        customCollectionRoyalties[collectionAddress].recipients,
+        customCollectionRoyalties[collectionAddress].fees
         );
     }
 
@@ -122,18 +127,21 @@ contract FeeProvider is Ownable {
      * @dev returns custom royalties for a collection
      * @param collection  address of a collection
      */
-    function getCustomRoyalties(
-        address collection
-    ) external view returns (CollectionRoyalties memory) {
+    function getCustomRoyalties(address collection)
+    external
+    view
+    returns (CollectionRoyalties memory)
+    {
         return customCollectionRoyalties[collection];
     }
 
     /**
      * @dev change fees beneficiary
      */
-    function changeFeesBeneficiary(
-        address newFeesBeneficiary
-    ) external onlyOwner {
+    function changeFeesBeneficiary(address newFeesBeneficiary)
+    external
+    onlyOwner
+    {
         require(newFeesBeneficiary != address(0));
         feesBeneficiary = newFeesBeneficiary;
     }
@@ -146,10 +154,7 @@ contract FeeProvider is Ownable {
         uint16 buyerFee,
         uint16 sellerFee
     ) external onlyOwner {
-        require(
-            sellerFee + buyerFee < 10000,
-            "FeeProvider: wrong fee amount"
-        );
+        require(sellerFee + buyerFee < 10000, "FeeProvider: wrong fee amount");
 
         delete marketplaceCollectionFee[collection];
         if (buyerFee + sellerFee > 0) {
@@ -190,10 +195,11 @@ contract FeeProvider is Ownable {
     /**
      * @dev used to calculate royalty fees and marketplace fees
      */
-    function calculateFee(
-        uint256 _amount,
-        uint16 _fee
-    ) internal pure returns (uint256) {
+    function calculateFee(uint256 _amount, uint16 _fee)
+    internal
+    pure
+    returns (uint256)
+    {
         return (_amount * _fee) / 10000;
     }
 }
